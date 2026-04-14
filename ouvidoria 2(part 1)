@@ -97,3 +97,54 @@ def atualizar_reclamacao():
     conexao = criar_conexao()
     if not conexao:
         return
+codigo = input("Digite o código: ")
+
+    if not codigo.isdigit():
+        print("Digite um número válido!")
+        return
+
+    novo_texto = input("Digite a nova reclamação: ")
+
+    sql = "UPDATE reclamacoes SET texto = %s WHERE id = %s"
+
+    with conexao.cursor() as cursor:
+        cursor.execute(sql, (novo_texto, codigo))
+        conexao.commit()
+
+        if cursor.rowcount > 0:
+            print("Atualizada com sucesso!")
+        else:
+            print("Reclamação não encontrada.")
+
+    conexao.close()
+
+
+def remover_reclamacao():
+    conexao = criar_conexao()
+    if not conexao:
+        return
+
+    codigo = input("Digite o código: ")
+
+    if not codigo.isdigit():
+        print("Digite um número válido!")
+        return
+
+    sql = "DELETE FROM reclamacoes WHERE id = %s"
+
+    with conexao.cursor() as cursor:
+        cursor.execute(sql, (codigo,))
+        conexao.commit()
+
+        if cursor.rowcount > 0:
+            print("Removida com sucesso!")
+        else:
+            print("Reclamação não encontrada.")
+
+    conexao.close()
+
+
+def total_reclamacoes():
+    conexao = criar_conexao()
+    if not conexao:
+        return

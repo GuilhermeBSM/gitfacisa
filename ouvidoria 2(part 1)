@@ -148,3 +148,56 @@ def total_reclamacoes():
     conexao = criar_conexao()
     if not conexao:
         return
+with conexao.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) FROM reclamacoes")
+        total = cursor.fetchone()
+        print(f"Total de reclamações: {total[0]}")
+
+    conexao.close()
+
+
+# MENU
+
+def menu():
+    inicializar_tabela()
+
+    while True:
+        print("\n=== SISTEMA DE OUVIDORIA (MYSQL) ===")
+        print("1 - Listar reclamações")
+        print("2 - Registrar nova reclamação")
+        print("3 - Pesquisar reclamação")
+        print("4 - Atualizar reclamação")
+        print("5 - Remover reclamação")
+        print("6 - Total de reclamações")
+        print("7 - Sair")
+
+        opcao = input("Escolha: ").strip()
+
+        if opcao == "1":
+            listar_reclamacoes()
+
+        elif opcao == "2":
+            registrar_reclamacao()
+
+        elif opcao == "3":
+            pesquisar_reclamacao()
+
+        elif opcao == "4":
+            atualizar_reclamacao()
+
+        elif opcao == "5":
+            remover_reclamacao()
+
+        elif opcao == "6":
+            total_reclamacoes()
+
+        elif opcao == "7":
+            print("Encerrando...")
+            break
+
+        else:
+            print("Opção inválida!")
+
+
+# EXECUÇÃO
+menu()

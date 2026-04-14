@@ -1,0 +1,54 @@
+import mysql.connector
+
+
+def criar_conexao():
+    try:
+        return mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="1234",
+            database="ouvidoria"
+        )
+    except mysql.connector.Error as err:
+        print(f"Erro ao conectar: {err}")
+        return None
+
+
+def inicializar_tabela():
+    conexao = criar_conexao()
+    if not conexao:
+        return
+
+    with conexao.cursor() as cursor:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS reclamacoes (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                texto TEXT NOT NULL
+            )
+        """)
+        conexao.commit()
+
+    conexao.close()
+
+
+
+def registrar_reclamacao():
+    conexao = criar_conexao()
+    if not conexao:
+        return
+
+    texto = input("Digite a reclamação: ")
+    sql = "INSERT INTO reclamacoes (texto) VALUES (%s)"
+
+    with conexao.cursor() as cursor:
+        cursor.execute(sql, (texto,))
+        conexao.commit()
+        print("Reclamação registrada com sucesso!")
+
+    conexao.close()
+
+
+def listar_reclamacoes():
+    conexao = criar_conexao()
+    if not conexao:
+        return
